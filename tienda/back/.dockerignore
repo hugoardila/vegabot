@@ -1,0 +1,22 @@
+# Go build artifacts
+main
+
+# Environment files
+.env
+
+# Docker files (not needed inside the container)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Git
+.git
+.gitignore
+
+# VS Code and other IDEs
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

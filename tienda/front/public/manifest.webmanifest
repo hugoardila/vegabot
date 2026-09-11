@@ -1,0 +1,17 @@
+{
+  "name": "VEGA IMPORTADORA - Catalogo Vendedor",
+  "short_name": "Vega Catalogo",
+  "start_url": "/tienda/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#0866D9",
+  "icons": [
+    {
+      "src": "/tienda/v-cuadrada.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

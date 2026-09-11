@@ -1,0 +1,21 @@
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+*~
+
+# Directorios de build/compilación generales
+build/
+out/
+
+# Archivos de logs globales
+*.log
+
+# Archivos de entorno globales (nunca subir al repositorio)
+.env
+.env.local
+.env.*.local

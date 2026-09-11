@@ -1,0 +1,45 @@
+# Binarios para Windows
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Binarios de prueba compilados
+*.test
+
+# Archivos de salida de la herramienta go race
+*.out
+
+# Dependencias (solo si usas vendor/)
+vendor/
+
+# Archivos de configuración local
+.env
+.env.local
+.env.*.local
+
+# Archivos de uploads (no versionar archivos subidos por usuarios)
+uploads/
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de log
+*.log
+
+# Archivos temporales
+tmp/
+temp/
+
+# Docker
+docker-compose.override.yml
+*.sql.backup

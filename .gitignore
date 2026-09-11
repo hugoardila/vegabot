@@ -1,0 +1,52 @@
+# Secrets and machine-specific configuration
+.env
+.env.*
+!.env.example
+!**/.env.example
+!**/.env.*.example
+*.pem
+*.key
+*.pfx
+*.p12
+
+# Dependencies and generated builds
+node_modules/
+**/node_modules/
+vendor/
+tienda/front/dist/
+tienda/front/.vite/
+coverage/
+
+# Runtime data and private customer files
+backups/
+logs/
+*.log
+node-start.err.log
+node-start.out.log
+storage/chat-media/*
+storage/payment-proofs/*
+storage/store-uploads/*
+!storage/chat-media/.gitkeep
+!storage/payment-proofs/.gitkeep
+!storage/store-uploads/.gitkeep
+
+# Databases and dumps
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+*.dump
+
+# Local deployment artifacts
+tienda/deploy/.env.prod
+tools/*.exe
+*.lnk
+/0
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.tmp

@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VEGA IMPORTADORA</title>
+    <link rel="stylesheet" href="/styles.css?v=20260729-settings-modals" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" id="brandMark">VI</div>
+        <div>
+          <strong id="brandName">VEGA IMPORTADORA</strong>
+          <span>Bot comercial WhatsApp</span>
+        </div>
+      </div>
+      <nav>
+        <button class="nav-item active" data-view="dashboard">Panel</button>
+        <button class="nav-item" data-view="clientes">Clientes</button>
+        <button class="nav-item" data-view="pedidos">Pedidos</button>
+        <button class="nav-item" data-view="inventario">Inventario</button>
+        <button class="nav-item" data-view="facturas">Facturas</button>
+        <button class="nav-item" data-view="config">Ajustes del sistema</button>
+        <button class="nav-item" data-view="tienda">Tienda</button>
+      </nav>
+    </aside>
+
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="topEyebrow">Operacion WhatsApp B2B</p>
+          <h1 id="viewTitle">Panel comercial</h1>
+        </div>
+        <div class="topbar-actions">
+          <div class="status-pill">
+            <span></span>
+            Bot operativo
+          </div>
+          <div class="session-user">
+            <strong id="adminSessionName">Usuario</strong>
+            <span id="adminSessionRole">Panel administrativo</span>
+          </div>
+          <button id="adminLogout" class="ghost-btn" type="button">Cerrar sesion</button>
+        </div>
+      </header>
+
+      <section id="dashboard" class="view active">
+        <div class="metrics-grid" id="metrics"></div>
+        <div class="two-column">
+          <section class="panel">
+            <div class="panel-head">
+              <h2>Pedidos recientes</h2>
+              <button class="ghost-btn" data-go="pedidos">Ver pedidos</button>
+            </div>
+            <div id="recentOrders" class="list"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head">
+              <h2>Clientes que requieren atencion</h2>
+              <button class="ghost-btn" data-go="clientes">Abrir clientes</button>
+            </div>
+            <div id="attentionCustomers" class="list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="clientes" class="view">
+        <section class="panel customers-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Clientes</h2>
+              <p class="muted">Selecciona un cliente para abrir el chat y controlar la atencion manual.</p>
+            </div>
+            <input id="customerSearch" class="search" placeholder="Buscar cliente, empresa o telefono" />
+          </div>
+          <div id="customersList" class="customer-list"></div>
+        </section>
+      </section>
+
+      <section id="pedidos" class="view">
+        <section class="panel orders-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Pedidos</h2>
+              <p class="muted">Selecciona un pedido para revisar productos, pago, validacion y despacho.</p>
+            </div>
+            <select id="orderFilter">
+              <option value="todos">Todos</option>
+              <option value="Datos por completar">Datos por completar</option>
+              <option value="Pendiente comprobante">Pendiente comprobante</option>
+              <option value="Pendiente validacion">Pendientes</option>
+              <option value="Validado manualmente">Validados</option>
+              <option value="Despachado">Despachados</option>
+              <option value="Cancelado">Cancelados</option>
+            </select>
+          </div>
+          <div id="ordersList" class="orders-list"></div>
+        </section>
+      </section>
+
+      <section id="inventario" class="view">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Inventario tecnologia</h2>
+              <p class="muted" id="inventoryCount">0 referencias</p>
+            </div>
+            <div class="filters">
+              <select id="categoryFilter"></select>
+              <input id="inventorySearch" class="search" placeholder="Buscar codigo, descripcion o categoria" />
+            </div>
+          </div>
+          <div id="inventoryTable" class="table"></div>
+          <datalist id="categoryOptions"></datalist>
+        </section>
+      </section>
+
+      <section id="facturas" class="view">
+        <section class="panel invoices-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Facturas del bot</h2>
+              <p class="muted">Facturas G en espera creadas desde pedidos de WhatsApp. Las ventas de la tienda no aparecen aqui.</p>
+            </div>
+            <select id="invoiceFilter">
+              <option value="todos">Todos los estados</option>
+              <option value="pending">Pendientes de SAINT</option>
+              <option value="invoice_created">Creadas, aviso pendiente</option>
+              <option value="completed">Creadas y notificadas</option>
+            </select>
+          </div>
+          <div class="invoice-window">
+            <div class="invoice-schedule">
+              <strong>Reintentos automaticos</strong>
+              <span>Todos los dias de 8:00 a. m. a 10:00 a. m., cada 10 minutos.</span>
+            </div>
+            <div id="invoicesList" class="invoices-list"></div>
+          </div>
+        </section>
+      </section>
+
+      <section id="config" class="view">
+        <section class="panel settings-hub-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Ajustes del sistema</h2>
+              <p class="muted">Configuracion del bot, integraciones, ventas y accesos administrativos.</p>
+            </div>
+            <span class="badge" id="configBrandBadge">VEGA IMPORTADORA</span>
+          </div>
+          <div class="settings-menu">
+            <button class="settings-entry" type="button" data-open-settings="twilio">
+              <span class="settings-entry-mark">WA</span>
+              <span class="settings-entry-copy"><strong>Configuracion Twilio WhatsApp</strong><small>Numero emisor, credenciales y URL publica</small></span>
+              <span class="settings-entry-arrow" aria-hidden="true">&rsaquo;</span>
+            </button>
+            <button class="settings-entry" type="button" data-open-settings="ai">
+              <span class="settings-entry-mark mark-ai">AI</span>
+              <span class="settings-entry-copy"><strong>OpenAI conversacional</strong><small>Modelo, llave privada, estilo y activacion</small></span>
+              <span class="settings-entry-arrow" aria-hidden="true">&rsaquo;</span>
+            </button>
+            <button id="botUsersEntry" class="settings-entry" type="button" data-open-settings="users">
+              <span class="settings-entry-mark mark-users">US</span>
+              <span class="settings-entry-copy"><strong>Usuarios del panel del bot</strong><small id="usersSettingSummary">Cuentas y permisos administrativos</small></span>
+              <span class="settings-entry-arrow" aria-hidden="true">&rsaquo;</span>
+            </button>
+            <button class="settings-entry" type="button" data-open-settings="other">
+              <span class="settings-entry-mark mark-other">CFG</span>
+              <span class="settings-entry-copy"><strong>Otros ajustes</strong><small>Validacion, precios mayoristas, tienda y pagos</small></span>
+              <span class="settings-entry-arrow" aria-hidden="true">&rsaquo;</span>
+            </button>
+            <button class="settings-entry" type="button" data-open-settings="webhook">
+              <span class="settings-entry-mark mark-webhook">URL</span>
+              <span class="settings-entry-copy"><strong>Webhook para Twilio</strong><small>Direccion publica para mensajes entrantes</small></span>
+              <span class="settings-entry-arrow" aria-hidden="true">&rsaquo;</span>
+            </button>
+          </div>
+        </section>
+      </section>
+
+      <section id="tienda" class="view">
+        <section class="panel tienda-panel tienda-access-panel">
+          <div class="store-access">
+            <div class="store-access-icon" aria-hidden="true">🏬</div>
+            <p class="eyebrow">Tienda virtual publica</p>
+            <h2>IR A LA TIENDA</h2>
+            <p>Abre el catalogo publico conectado al inventario de VEGA IMPORTADORA.</p>
+            <a class="primary-btn store-access-link" href="/tienda/">Entrar a la tienda virtual</a>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div id="settingsTwilioModal" class="modal-backdrop settings-modal-backdrop" data-settings-modal="twilio" hidden>
+      <section class="modal-panel settings-modal-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTwilioTitle">
+        <form class="settings-modal-form" data-settings-form>
+          <div class="modal-head">
+            <div>
+              <p class="eyebrow">Canal WhatsApp</p>
+              <h2 id="settingsTwilioTitle">Configuracion Twilio WhatsApp</h2>
+            </div>
+            <button class="ghost-btn" type="button" data-close-settings>Cerrar</button>
+          </div>
+          <div class="settings-modal-body form-grid">
+            <label>Numero WhatsApp Twilio<input id="whatsappNumber" placeholder="+57..." /></label>
+            <label>Account SID<input id="accountSid" placeholder="ACxxxxxxxxxxxxxxxx" /></label>
+            <label>Auth Token<input id="authToken" type="password" placeholder="Token privado Twilio" /></label>
+            <label>Messaging Service SID<input id="messagingServiceSid" placeholder="MGxxxxxxxxxxxxxxxx" /></label>
+            <label class="wide">URL publica del proyecto<input id="publicBaseUrl" placeholder="https://tu-dominio.com" /></label>
+          </div>
+          <div class="settings-modal-footer">
+            <button class="ghost-btn" type="button" data-close-settings>Cancelar</button>
+            <button class="primary-btn" type="submit">Guardar Twilio</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div id="settingsAiModal" class="modal-backdrop settings-modal-backdrop" data-settings-modal="ai" hidden>
+      <section class="modal-panel settings-modal-panel" role="dialog" aria-modal="true" aria-labelledby="settingsAiTitle">
+        <form class="settings-modal-form" data-settings-form>
+          <div class="modal-head">
+            <div>
+              <p class="eyebrow">Asistente de ventas</p>
+              <h2 id="settingsAiTitle">OpenAI conversacional</h2>
+            </div>
+            <button class="ghost-btn" type="button" data-close-settings>Cerrar</button>
+          </div>
+          <div class="settings-modal-body">
+            <div class="settings-toggle-row">
+              <div><strong>Inteligencia artificial activa</strong><span>El bot usa OpenAI para comprender y responder al cliente.</span></div>
+              <label class="switch"><input id="aiEnabled" type="checkbox" /><span></span></label>
+            </div>
+            <div class="form-grid">
+              <label>Modelo OpenAI<input id="aiModel" placeholder="gpt-5.6" /></label>
+              <label>OpenAI API Key<input id="aiApiKey" type="password" placeholder="Clave privada OpenAI" /></label>
+              <label class="wide">Estilo del bot<textarea id="aiStyle" placeholder="Amable, vendedor, claro y breve"></textarea></label>
+            </div>
+          </div>
+          <div class="settings-modal-footer">
+            <button class="ghost-btn" type="button" data-close-settings>Cancelar</button>
+            <button class="primary-btn" type="submit">Guardar OpenAI</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div id="settingsUsersModal" class="modal-backdrop settings-modal-backdrop" data-settings-modal="users" hidden>
+      <section class="modal-panel settings-modal-panel settings-users-modal" role="dialog" aria-modal="true" aria-labelledby="settingsUsersTitle">
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow">Accesos administrativos</p>
+            <h2 id="settingsUsersTitle">Usuarios del panel del bot</h2>
+          </div>
+          <button class="ghost-btn" type="button" data-close-settings>Cerrar</button>
+        </div>
+        <div class="settings-modal-body">
+          <form id="botUserForm" class="bot-user-form">
+            <label>Nombre<input id="botUserName" required minlength="3" placeholder="Nombre del colaborador" /></label>
+            <label>Correo<input id="botUserEmail" required type="email" placeholder="asesor@vega.local" /></label>
+            <label>Rol<select id="botUserRole"><option value="asesor_caja">Asesor / Caja</option><option value="admin">Administrador</option></select></label>
+            <label>Contrasena<input id="botUserPassword" required type="password" minlength="10" placeholder="Minimo 10 caracteres" /></label>
+            <button class="primary-btn" type="submit">Crear usuario</button>
+          </form>
+          <div id="botUsersList" class="bot-users-list"></div>
+        </div>
+      </section>
+    </div>
+
+    <div id="settingsOtherModal" class="modal-backdrop settings-modal-backdrop" data-settings-modal="other" hidden>
+      <section class="modal-panel settings-modal-panel settings-other-modal" role="dialog" aria-modal="true" aria-labelledby="settingsOtherTitle">
+        <form class="settings-modal-form" data-settings-form>
+          <div class="modal-head">
+            <div>
+              <p class="eyebrow">Operacion comercial</p>
+              <h2 id="settingsOtherTitle">Otros ajustes</h2>
+            </div>
+            <button class="ghost-btn" type="button" data-close-settings>Cerrar</button>
+          </div>
+          <div class="settings-modal-body">
+            <h3 class="settings-section-title">Negocio y condiciones comerciales</h3>
+            <div class="form-grid">
+              <label>Nombre del negocio<input id="businessName" /></label>
+              <label>Numero validador pagos<input id="paymentValidatorNumber" placeholder="+57..." /><span class="field-hint">Este numero solo valida pagos; no recibe catalogo, carrito ni pedidos.</span></label>
+              <label>Numero de notificaciones<input id="orderNotificationNumber" inputmode="numeric" placeholder="3212947266" /><span class="field-hint">Recibe los avisos desde el WhatsApp del bot. Si escribe al bot, sus mensajes se ignoran.</span></label>
+              <label>Referencias minimas<input id="minimumWholesaleReferences" type="number" min="1" value="2" /><span class="field-hint">Referencias distintas que deben cumplir la cantidad minima.</span></label>
+              <label>Unidades minimas por referencia<input id="minimumWholesaleUnits" type="number" min="1" value="6" /></label>
+              <label>Unidades totales minimas<input id="minimumWholesaleTotalUnits" type="number" min="1" value="12" /></label>
+              <label>Compra minima mayorista<input id="minimumWholesaleAmount" type="number" min="1" step="1" value="300000" /><span class="field-hint">El subtotal a Precio 2 debe ser igual o superior a este valor.</span></label>
+              <label>Condiciones comerciales<input id="paymentTerms" /></label>
+              <label>Clave inventario<input id="inventoryKey" type="password" inputmode="numeric" maxlength="6" placeholder="6 digitos" /><span class="field-hint">Protege cambios sensibles de precio, stock e inventario.</span></label>
+              <label class="wide">Datos bancarios<textarea id="bankInfo" placeholder="Banco, tipo de cuenta, numero, titular, NIT"></textarea></label>
+            </div>
+            <h3 class="settings-section-title">Tienda, Google y Wompi</h3>
+            <div class="form-grid">
+              <label class="wide">Google OAuth Client ID<input id="storeGoogleClientId" placeholder="xxxxxxxx.apps.googleusercontent.com" /></label>
+              <label>Wompi Public Key<input id="wompiPublicKey" placeholder="pub_test_..." /></label>
+              <label>Wompi API URL<input id="wompiApiUrl" placeholder="https://production.wompi.co/v1" /></label>
+              <label class="wide">Wompi Private Key<input id="wompiPrivateKey" type="password" placeholder="prv_test_... o prv_prod_..." /></label>
+            </div>
+          </div>
+          <div class="settings-modal-footer">
+            <button class="ghost-btn" type="button" data-close-settings>Cancelar</button>
+            <button class="primary-btn" type="submit">Guardar otros ajustes</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div id="settingsWebhookModal" class="modal-backdrop settings-modal-backdrop" data-settings-modal="webhook" hidden>
+      <section class="modal-panel settings-modal-panel settings-webhook-modal" role="dialog" aria-modal="true" aria-labelledby="settingsWebhookTitle">
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow">Mensajes entrantes</p>
+            <h2 id="settingsWebhookTitle">Webhook para Twilio</h2>
+          </div>
+          <button class="ghost-btn" type="button" data-close-settings>Cerrar</button>
+        </div>
+        <div class="settings-modal-body">
+          <div class="webhook-copy-row">
+            <div class="webhook-box" id="webhookUrl"></div>
+            <button id="copyWebhook" class="primary-btn" type="button">Copiar</button>
+          </div>
+          <div class="setup-list">
+            <div><strong>Metodo</strong><span>POST</span></div>
+            <div><strong>Content-Type</strong><span>application/x-www-form-urlencoded</span></div>
+            <div><strong>Ruta local</strong><span>/webhook/twilio</span></div>
+            <div><strong>Respuesta</strong><span>TwiML automatico para WhatsApp</span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div id="customerModal" class="modal-backdrop" hidden>
+      <section class="modal-panel customer-modal-panel" role="dialog" aria-modal="true" aria-labelledby="chatTitle">
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow">Chat WhatsApp</p>
+            <h2 id="chatTitle">Conversacion</h2>
+            <p class="muted" id="chatSubtitle">Atencion manual y seguimiento WhatsApp</p>
+          </div>
+          <div class="modal-actions">
+            <label class="manual-toggle">
+              <input id="manualAttentionToggle" type="checkbox" />
+              <span>Atencion manual</span>
+            </label>
+            <button id="closeCustomerModal" class="ghost-btn" type="button">Cerrar</button>
+          </div>
+        </div>
+        <div id="conversation" class="conversation"></div>
+        <form id="manualMessageForm" class="message-form">
+          <div class="composer-toolbar">
+            <button class="tool-btn" type="button" data-attachment="image" title="Adjuntar imagen">Img</button>
+            <button class="tool-btn" type="button" data-attachment="audio" title="Adjuntar audio">Audio</button>
+            <button class="tool-btn" type="button" data-attachment="video" title="Adjuntar video">Video</button>
+            <button class="tool-btn" type="button" data-attachment="file" title="Adjuntar documento">Doc</button>
+            <button id="toggleTemplatePanel" class="tool-btn" type="button">Plantilla</button>
+            <span id="templatePanel" class="template-inline" hidden>
+              <select id="twilioTemplateSelect" title="Plantillas Twilio"><option value="">Plantillas...</option></select>
+              <button id="sendTemplate" class="primary-btn" type="button">Enviar</button>
+            </span>
+            <span id="attachmentPreview">Sin adjunto</span>
+            <button id="clearAttachment" class="tool-btn" type="button">Quitar</button>
+          </div>
+          <span id="templateStatus" class="muted template-status">Plantillas Twilio</span>
+          <input id="manualMessage" placeholder="Responder manualmente al cliente" />
+          <input id="mediaInput" type="file" hidden />
+          <button type="submit">Enviar</button>
+        </form>
+      </section>
+    </div>
+
+    <div id="orderModal" class="modal-backdrop" hidden>
+      <section class="modal-panel order-modal-panel" role="dialog" aria-modal="true" aria-labelledby="orderModalTitle">
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow">Validacion y despacho</p>
+            <h2 id="orderModalTitle">Pedido</h2>
+          </div>
+          <div class="modal-actions">
+            <span id="selectedOrderBadge" class="badge">Sin pedido</span>
+            <button id="closeOrderModal" class="ghost-btn" type="button">Cerrar</button>
+          </div>
+        </div>
+        <div id="orderSummary" class="order-summary"></div>
+        <form id="orderForm" class="form-grid">
+          <h3 class="form-section-title wide">Estados y validacion</h3>
+          <label>Estado del pedido<select id="orderStatus"><option>Datos por completar</option><option>Pendiente comprobante</option><option>Pendiente validacion</option><option>Validado manualmente</option><option>Despachado</option><option>Cancelado</option></select></label>
+          <label>Estado de pago<select id="paymentStatus"><option>Por confirmar</option><option>Pendiente comprobante</option><option>Pendiente validacion pago</option><option>Comprobante recibido</option><option>Pago por validar</option><option>Contraentrega por validar</option><option>Pagado</option><option>Credito aprobado</option><option>Rechazado</option></select></label>
+          <label>Validacion<select id="validationStatus"><option value="pendiente_datos_cliente">Pendiente datos cliente</option><option value="pendiente_comprobante">Pendiente comprobante</option><option value="pendiente_validacion">Pendiente validacion</option><option value="validado">Validado</option><option value="requiere_ajuste">Requiere ajuste</option><option value="rechazado">Rechazado</option></select></label>
+          <label>Prioridad<select id="priority"><option value="normal">Normal</option><option value="alta">Alta</option><option value="urgente">Urgente</option></select></label>
+          <h3 class="form-section-title wide">Datos de despacho</h3>
+          <label>Transportadora<input id="carrier" placeholder="Servientrega, Coordinadora..." /></label>
+          <label>Guia<input id="guide" placeholder="Numero de guia" /></label>
+          <label>Ciudad<input id="city" placeholder="Ciudad destino" /></label>
+          <label>Direccion<input id="address" placeholder="Direccion despacho" /></label>
+          <label class="wide">Notas<textarea id="dispatchNotes" placeholder="Notas internas de validacion"></textarea></label>
+          <label class="wide">Notas internas<textarea id="internalNotes" placeholder="Observaciones para el equipo: precio ajustado, stock fisico, riesgo, pago, etc."></textarea></label>
+          <button class="primary-btn wide" type="submit">Guardar validacion</button>
+        </form>
+      </section>
+    </div>
+
+    <script src="/app.js?v=20260729-settings-modals"></script>
+  </body>
+</html>
